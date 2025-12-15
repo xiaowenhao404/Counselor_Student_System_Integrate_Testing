@@ -39,7 +39,8 @@ public class DatabaseConnection {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                // 资源关闭失败，记录但不抛出异常
+                System.err.println("关闭数据库连接失败: " + e.getMessage());
             }
         }
     }

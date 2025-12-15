@@ -4,7 +4,6 @@ import dao.CounselorDaoImpl;
 import dao.StudentDaoImpl;
 import entity.Student;
 import entity.Counselor;
-import entity.Admin;
 
 import java.sql.SQLException;
 
@@ -59,6 +58,10 @@ public class AuthService {
                 if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
                     return new LoginResult(UserType.ADMIN, ADMIN_USERNAME, "管理员");
                 }
+                break;
+            case NONE:
+            default:
+                // NONE类型或未知类型，返回失败结果
                 break;
         }
 

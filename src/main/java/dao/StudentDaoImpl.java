@@ -7,9 +7,56 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class StudentDaoImpl implements StudentDao {
+
+    /**
+     * 安全关闭数据库资源
+     */
+    private static void closeResources(Connection connection, PreparedStatement ps, ResultSet rs) {
+        DatabaseConnection.closeConnection(connection);
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                // 资源关闭失败，记录但不抛出异常
+                System.err.println("关闭PreparedStatement失败: " + e.getMessage());
+            }
+        }
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                // 资源关闭失败，记录但不抛出异常
+                System.err.println("关闭ResultSet失败: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 从ResultSet中提取日期字段，处理null值
+     */
+    private static java.time.LocalDate extractDateOfBirth(ResultSet rs, String columnName) throws SQLException {
+        java.sql.Date sqlDate = rs.getDate(columnName);
+        return sqlDate != null ? sqlDate.toLocalDate() : null;
+    }
+
+    /**
+     * 从ResultSet中创建Student对象
+     */
+    private static Student mapResultSetToStudent(ResultSet rs) throws SQLException {
+        Student student = new Student();
+        student.setStudentId(rs.getString("学生学号"));
+        student.setMajorId(rs.getString("专业编号"));
+        student.setGradeNumber(rs.getString("年级编号"));
+        student.setClassId(rs.getString("班级编号"));
+        student.setName(rs.getString("姓名"));
+        student.setGender(rs.getString("性别"));
+        student.setDateOfBirth(extractDateOfBirth(rs, "出生日期"));
+        student.setPhoneNumber(rs.getString("手机号码"));
+        student.setPassword(rs.getString("密码"));
+        return student;
+    }
 
     @Override
     public Student getStudentByIdAndPassword(String studentId, String password) throws SQLException {
@@ -27,39 +74,10 @@ public class StudentDaoImpl implements StudentDao {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                student = new Student();
-                student.setStudentId(rs.getString("学生学号"));
-                student.setMajorId(rs.getString("专业编号"));
-                student.setGradeNumber(rs.getString("年级编号"));
-                student.setClassId(rs.getString("班级编号"));
-                student.setName(rs.getString("姓名"));
-                student.setGender(rs.getString("性别"));
-
-                // 处理可能为 null 的日期
-                java.sql.Date sqlDateOfBirth = rs.getDate("出生日期");
-                if (sqlDateOfBirth != null) {
-                    student.setDateOfBirth(sqlDateOfBirth.toLocalDate());
-                }
-
-                student.setPhoneNumber(rs.getString("手机号码"));
-                student.setPassword(rs.getString("密码"));
+                student = mapResultSetToStudent(rs);
             }
         } finally {
-            DatabaseConnection.closeConnection(connection);
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeResources(connection, ps, rs);
         }
         return student;
     }
@@ -79,38 +97,10 @@ public class StudentDaoImpl implements StudentDao {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                student = new Student();
-                student.setStudentId(rs.getString("学生学号"));
-                student.setMajorId(rs.getString("专业编号"));
-                student.setGradeNumber(rs.getString("年级编号"));
-                student.setClassId(rs.getString("班级编号"));
-                student.setName(rs.getString("姓名"));
-                student.setGender(rs.getString("性别"));
-
-                java.sql.Date sqlDateOfBirth = rs.getDate("出生日期");
-                if (sqlDateOfBirth != null) {
-                    student.setDateOfBirth(sqlDateOfBirth.toLocalDate());
-                }
-
-                student.setPhoneNumber(rs.getString("手机号码"));
-                student.setPassword(rs.getString("密码"));
+                student = mapResultSetToStudent(rs);
             }
         } finally {
-            DatabaseConnection.closeConnection(connection);
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeResources(connection, ps, rs);
         }
         return student;
     }
