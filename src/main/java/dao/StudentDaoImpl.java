@@ -1,4 +1,4 @@
-package dao;
+﻿package dao;
 
 import db.DatabaseConnection;
 import entity.Student;
@@ -12,17 +12,11 @@ public class StudentDaoImpl implements StudentDao {
 
     /**
      * 安全关闭数据库资源
+     * 按照JDBC规范，资源应按创建顺序的相反顺序关闭：ResultSet → PreparedStatement → Connection
+     * 关闭Connection会自动关闭所有关联的资源，因此必须先关闭ResultSet和PreparedStatement
      */
     private static void closeResources(Connection connection, PreparedStatement ps, ResultSet rs) {
-        DatabaseConnection.closeConnection(connection);
-        if (ps != null) {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                // 资源关闭失败，记录但不抛出异常
-                System.err.println("关闭PreparedStatement失败: " + e.getMessage());
-            }
-        }
+        // 1. 先关闭ResultSet（最先创建的资源）
         if (rs != null) {
             try {
                 rs.close();
@@ -31,7 +25,18 @@ public class StudentDaoImpl implements StudentDao {
                 System.err.println("关闭ResultSet失败: " + e.getMessage());
             }
         }
-    }
+        // 2. 然后关闭PreparedStatement
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                // 资源关闭失败，记录但不抛出异常
+                System.err.println("关闭PreparedStatement失败: " + e.getMessage());
+            }
+        }
+        // 3. 最后关闭Connection（关闭Connection会自动关闭所有关联的资源）
+        DatabaseConnection.closeConnection(connection);
+     }
 
     /**
      * 从ResultSet中提取日期字段，处理null值
@@ -108,10 +113,10 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean addStudent(Student student) throws SQLException {
         String sql = "INSERT INTO 学生 (学生学号, 专业编号, 年级编号, 班级编号, 姓名, 性别, 出生日期, 手机号码, 密码) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, student.getStudentId());
             ps.setString(2, student.getMajorId());
             ps.setString(3, student.getGradeNumber());
@@ -121,7 +126,7 @@ public class StudentDaoImpl implements StudentDao {
             ps.setDate(7, student.getDateOfBirth() != null ? java.sql.Date.valueOf(student.getDateOfBirth()) : null);
             ps.setString(8, student.getPhoneNumber());
             ps.setString(9, student.getPassword());
-            
+
             int result = ps.executeUpdate();
             return result > 0;
         }
@@ -130,10 +135,10 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean updateStudent(Student student) throws SQLException {
         String sql = "UPDATE 学生 SET 专业编号 = ?, 年级编号 = ?, 班级编号 = ?, 姓名 = ?, 性别 = ?, 出生日期 = ?, 手机号码 = ?, 密码 = ? WHERE 学生学号 = ?";
-        
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, student.getMajorId());
             ps.setString(2, student.getGradeNumber());
             ps.setString(3, student.getClassId());
@@ -143,7 +148,7 @@ public class StudentDaoImpl implements StudentDao {
             ps.setString(7, student.getPhoneNumber());
             ps.setString(8, student.getPassword());
             ps.setString(9, student.getStudentId());
-            
+
             int result = ps.executeUpdate();
             return result > 0;
         }
@@ -152,12 +157,12 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean deleteStudent(String studentId) throws SQLException {
         String sql = "DELETE FROM 学生 WHERE 学生学号 = ?";
-        
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, studentId);
-            
+
             int result = ps.executeUpdate();
             return result > 0;
         }
@@ -166,12 +171,12 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public int getStudentCountByClassId(String classId) throws SQLException {
         String sql = "SELECT COUNT(*) as count FROM 学生 WHERE 班级编号 = ?";
-        
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, classId);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("count");
