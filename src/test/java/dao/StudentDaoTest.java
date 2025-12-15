@@ -24,14 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class StudentDaoTest {
 
     private StudentDaoImpl studentDao;
-    
+
     // 测试数据常量
     private static final String TEST_STUDENT_ID = "TEST001";
     private static final String TEST_STUDENT_ID_2 = "TEST002";
     private static final String TEST_STUDENT_ID_NOT_EXIST = "TEST999";
-    private static final String TEST_MAJOR_ID = "8329";  // 从data.sql中获取的有效专业编号
-    private static final String TEST_GRADE_NUMBER = "2023";  // 从data.sql中获取的有效年级编号
-    private static final String TEST_CLASS_ID = "1";  // 从data.sql中获取的有效班级编号
+    private static final String TEST_MAJOR_ID = "8329"; // 从data.sql中获取的有效专业编号
+    private static final String TEST_GRADE_NUMBER = "2023"; // 从data.sql中获取的有效年级编号
+    private static final String TEST_CLASS_ID = "1"; // 从data.sql中获取的有效班级编号
     private static final String TEST_PASSWORD = "test123";
     private static final String TEST_WRONG_PASSWORD = "wrong123";
 
@@ -39,7 +39,7 @@ class StudentDaoTest {
     void setUp() {
         // 在每个测试方法执行前初始化
         studentDao = new StudentDaoImpl();
-        
+
         // 准备测试数据：插入一个测试学生
         try {
             insertTestStudent(TEST_STUDENT_ID, "测试学生1", TEST_PASSWORD);
@@ -66,11 +66,11 @@ class StudentDaoTest {
      */
     private void insertTestStudent(String studentId, String name, String password) throws SQLException {
         String sql = "INSERT INTO 学生 (学生学号, 专业编号, 年级编号, 班级编号, 姓名, 性别, 出生日期, 手机号码, 密码) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, studentId);
             ps.setString(2, TEST_MAJOR_ID);
             ps.setString(3, TEST_GRADE_NUMBER);
@@ -80,7 +80,7 @@ class StudentDaoTest {
             ps.setDate(7, java.sql.Date.valueOf(LocalDate.of(2000, 1, 1)));
             ps.setString(8, "13800000000");
             ps.setString(9, password);
-            
+
             ps.executeUpdate();
         }
     }
@@ -90,10 +90,10 @@ class StudentDaoTest {
      */
     private void deleteTestStudent(String studentId) throws SQLException {
         String sql = "DELETE FROM 学生 WHERE 学生学号 = ?";
-        
+
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, studentId);
             ps.executeUpdate();
         }
@@ -104,7 +104,7 @@ class StudentDaoTest {
     void testGetStudentByIdAndPassword_Success() throws SQLException {
         // 测试场景：使用正确的学号和密码查询
         Student student = studentDao.getStudentByIdAndPassword(TEST_STUDENT_ID, TEST_PASSWORD);
-        
+
         assertNotNull(student, "应该能查询到学生");
         assertEquals(TEST_STUDENT_ID, student.getStudentId(), "学号应该匹配");
         assertEquals("测试学生1", student.getName(), "姓名应该匹配");
@@ -116,7 +116,7 @@ class StudentDaoTest {
     void testGetStudentByIdAndPassword_WrongPassword() throws SQLException {
         // 测试场景：使用正确的学号但错误的密码
         Student student = studentDao.getStudentByIdAndPassword(TEST_STUDENT_ID, TEST_WRONG_PASSWORD);
-        
+
         assertNull(student, "错误密码应该返回null");
     }
 
@@ -125,7 +125,7 @@ class StudentDaoTest {
     void testGetStudentByIdAndPassword_NotExist() throws SQLException {
         // 测试场景：使用不存在的学号
         Student student = studentDao.getStudentByIdAndPassword(TEST_STUDENT_ID_NOT_EXIST, TEST_PASSWORD);
-        
+
         assertNull(student, "不存在的学号应该返回null");
     }
 
@@ -134,7 +134,7 @@ class StudentDaoTest {
     void testGetStudentById_Exists() throws SQLException {
         // 测试场景：查询存在的学生
         Student student = studentDao.getStudentById(TEST_STUDENT_ID);
-        
+
         assertNotNull(student, "应该能查询到学生");
         assertEquals(TEST_STUDENT_ID, student.getStudentId(), "学号应该匹配");
         assertEquals("测试学生1", student.getName(), "姓名应该匹配");
@@ -148,7 +148,7 @@ class StudentDaoTest {
     void testGetStudentById_NotExists() throws SQLException {
         // 测试场景：查询不存在的学生
         Student student = studentDao.getStudentById(TEST_STUDENT_ID_NOT_EXIST);
-        
+
         assertNull(student, "不存在的学号应该返回null");
     }
 
@@ -157,7 +157,7 @@ class StudentDaoTest {
     void testGetStudentById_EmptyString() throws SQLException {
         // 测试场景：传入空字符串
         Student student = studentDao.getStudentById("");
-        
+
         assertNull(student, "空字符串应该返回null");
     }
 
@@ -175,11 +175,11 @@ class StudentDaoTest {
         newStudent.setDateOfBirth(LocalDate.of(2001, 5, 15));
         newStudent.setPhoneNumber("13900000000");
         newStudent.setPassword("password123");
-        
+
         boolean result = studentDao.addStudent(newStudent);
-        
+
         assertTrue(result, "添加学生应该成功");
-        
+
         // 验证学生确实被添加
         Student addedStudent = studentDao.getStudentById(TEST_STUDENT_ID_2);
         assertNotNull(addedStudent, "添加的学生应该能查询到");
@@ -191,13 +191,13 @@ class StudentDaoTest {
     void testAddStudent_DuplicateId() {
         // 测试场景：添加重复学号的学生（应该失败）
         Student duplicateStudent = new Student();
-        duplicateStudent.setStudentId(TEST_STUDENT_ID);  // 使用已存在的学号
+        duplicateStudent.setStudentId(TEST_STUDENT_ID); // 使用已存在的学号
         duplicateStudent.setMajorId(TEST_MAJOR_ID);
         duplicateStudent.setGradeNumber(TEST_GRADE_NUMBER);
         duplicateStudent.setClassId(TEST_CLASS_ID);
         duplicateStudent.setName("重复学生");
         duplicateStudent.setPassword("password123");
-        
+
         // 应该抛出SQLException（违反主键约束）
         assertThrows(SQLException.class, () -> {
             studentDao.addStudent(duplicateStudent);
@@ -210,16 +210,16 @@ class StudentDaoTest {
         // 测试场景：更新存在的学生信息
         Student student = studentDao.getStudentById(TEST_STUDENT_ID);
         assertNotNull(student, "测试前应该存在该学生");
-        
+
         // 修改学生信息
         student.setName("更新后的姓名");
         student.setPhoneNumber("13999999999");
         student.setGender("女");
-        
+
         boolean result = studentDao.updateStudent(student);
-        
+
         assertTrue(result, "更新学生应该成功");
-        
+
         // 验证更新是否生效
         Student updatedStudent = studentDao.getStudentById(TEST_STUDENT_ID);
         assertNotNull(updatedStudent, "更新后应该能查询到学生");
@@ -239,9 +239,9 @@ class StudentDaoTest {
         nonExistentStudent.setClassId(TEST_CLASS_ID);
         nonExistentStudent.setName("不存在的学生");
         nonExistentStudent.setPassword("password123");
-        
+
         boolean result = studentDao.updateStudent(nonExistentStudent);
-        
+
         assertFalse(result, "更新不存在的学生应该返回false");
     }
 
@@ -252,15 +252,15 @@ class StudentDaoTest {
         // 先验证学生存在
         Student student = studentDao.getStudentById(TEST_STUDENT_ID);
         assertNotNull(student, "删除前应该存在该学生");
-        
+
         boolean result = studentDao.deleteStudent(TEST_STUDENT_ID);
-        
+
         assertTrue(result, "删除学生应该成功");
-        
+
         // 验证学生确实被删除
         Student deletedStudent = studentDao.getStudentById(TEST_STUDENT_ID);
         assertNull(deletedStudent, "删除后应该查询不到学生");
-        
+
         // 重新插入，以便@AfterEach清理
         insertTestStudent(TEST_STUDENT_ID, "测试学生1", TEST_PASSWORD);
     }
@@ -270,7 +270,7 @@ class StudentDaoTest {
     void testDeleteStudent_NotExists() throws SQLException {
         // 测试场景：删除不存在的学生（应该返回false）
         boolean result = studentDao.deleteStudent(TEST_STUDENT_ID_NOT_EXIST);
-        
+
         assertFalse(result, "删除不存在的学生应该返回false");
     }
 
@@ -279,7 +279,7 @@ class StudentDaoTest {
     void testDeleteStudent_EmptyString() throws SQLException {
         // 测试场景：传入空字符串
         boolean result = studentDao.deleteStudent("");
-        
+
         assertFalse(result, "空字符串应该返回false");
     }
 
@@ -289,7 +289,7 @@ class StudentDaoTest {
         // 测试场景：统计有学生的班级
         // 确保测试学生在该班级中
         int count = studentDao.getStudentCountByClassId(TEST_CLASS_ID);
-        
+
         assertTrue(count >= 1, "该班级应该至少有1个学生（测试学生）");
     }
 
@@ -298,7 +298,7 @@ class StudentDaoTest {
     void testGetStudentCountByClassId_EmptyClass() throws SQLException {
         // 测试场景：统计没有学生的班级（使用一个不存在的班级编号）
         int count = studentDao.getStudentCountByClassId("999");
-        
+
         assertEquals(0, count, "不存在的班级应该返回0");
     }
 
@@ -307,7 +307,7 @@ class StudentDaoTest {
     void testGetStudentCountByClassId_EmptyString() throws SQLException {
         // 测试场景：传入空字符串
         int count = studentDao.getStudentCountByClassId("");
-        
+
         assertEquals(0, count, "空字符串应该返回0");
     }
 
