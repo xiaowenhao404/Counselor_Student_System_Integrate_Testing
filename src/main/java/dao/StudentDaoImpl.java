@@ -1,4 +1,4 @@
-﻿package dao;
+package dao;
 
 import db.DatabaseConnection;
 import entity.Student;
@@ -36,7 +36,7 @@ public class StudentDaoImpl implements StudentDao {
         }
         // 3. 最后关闭Connection（关闭Connection会自动关闭所有关联的资源）
         DatabaseConnection.closeConnection(connection);
-     }
+    }
 
     /**
      * 从ResultSet中提取日期字段，处理null值
