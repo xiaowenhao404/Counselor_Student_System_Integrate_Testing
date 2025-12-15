@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Separator?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.ConsultationDetailController"
+      stylesheets="@consultation_detail.css" styleClass="main-container">
+
+    <!-- 顶部返回栏 -->
+    <HBox styleClass="top-bar">
+        <HBox alignment="CENTER_LEFT" spacing="5">
+            <ImageView fx:id="backIcon" fitHeight="20" fitWidth="20" pickOnBounds="true" preserveRatio="true" styleClass="back-icon">
+                <image>
+                    <Image url="@../images/back.png" />
+                </image>
+            </ImageView>
+            <Label fx:id="backLabel" styleClass="back-label" text="返回列表">
+                <font>
+                    <Font name="System Bold" size="16.0" />
+                </font>
+            </Label>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <!-- 信息展示部分 -->
+    <VBox styleClass="info-section">
+        <HBox alignment="TOP_LEFT" spacing="20">
+            <!-- Left Column: Question, Time, Detail Content, Status -->
+            <VBox HBox.hgrow="ALWAYS" spacing="5">
+                <HBox spacing="10">
+                    <Label styleClass="label-bold" text="问题：" />
+                    <Label fx:id="questionLabel" styleClass="info-text" text="问题内容" />
+                </HBox>
+                <HBox spacing="10">
+                    <Label fx:id="timeLabel" styleClass="info-text small" text="2024-07-12 10:00" />
+                </HBox>
+                <HBox fx:id="detailContentContainer" spacing="10"> <!-- New HBox for detailed content visibility -->
+                    <Label fx:id="detailContentLabelPrefix" styleClass="label-bold" text="详细内容：" />
+                    <Label fx:id="contentLabel" styleClass="info-text" text="详细提问内容" wrapText="true" />
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <!-- Removed "当前状态：" label -->
+                    <Label fx:id="statusLabel" styleClass="status-tag" text="未回复" />
+                </HBox>
+            </VBox>
+            <!-- Right Column: Consultation ID and Collect Icon -->
+            <VBox alignment="TOP_RIGHT" spacing="5">
+                <HBox alignment="CENTER_RIGHT" spacing="5">
+                    <!-- Removed "咨询编号：" label -->
+                    <Label fx:id="consultationIdLabel" styleClass="info-text" text="编号: 20240712001" />
+                </HBox>
+                <Region VBox.vgrow="ALWAYS" /> <!-- Pushes collectIcon to bottom -->
+                <ImageView fx:id="collectIcon" fitHeight="25" fitWidth="25" pickOnBounds="true" preserveRatio="true" styleClass="collect-icon">
+                    <image>
+                        <Image url="@../images/uncollected.png" />
+                    </image>
+                </ImageView>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- 分割线 -->
+    <Separator />
+
+    <!-- 追问与回复记录区域 -->
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="history-scroll-pane history-card-container">
+        <VBox fx:id="historyContainer" styleClass="history-container" spacing="15">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+            </padding>
+            <!-- 历史记录将由控制器动态添加 -->
+        </VBox>
+    </ScrollPane>
+
+    <!-- 我要追问按钮 (在特定状态下显示) -->
+    <HBox alignment="BOTTOM_RIGHT" styleClass="ask-further-button-container">
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="markUnresolvedButton" text="仍需解决" styleClass="mark-unresolved-button" visible="false" managed="false">
+            <HBox.margin>
+                <Insets bottom="10.0" right="20.0" top="10.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="askFurtherButton" text="我要追问" styleClass="ask-further-button" visible="false" managed="false">
+            <HBox.margin>
+                <Insets bottom="10.0" right="20.0" top="10.0" />
+            </HBox.margin>
+        </Button>
+    </HBox>
+
+    <!-- 我要追问区域（在特定状态下显示） -->
+    <VBox fx:id="askFurtherBox" styleClass="inquiry-section" spacing="10" visible="false" managed="false">
+        <padding>
+            <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+        </padding>
+        <TextArea fx:id="askFurtherTextArea" promptText="请输入追问内容 (最多100个字)" styleClass="inquiry-textarea" />
+        <HBox alignment="CENTER_RIGHT">
+            <Label fx:id="askFurtherCharCountLabel" text="0/100" styleClass="char-count-label" />
+            <Button fx:id="sendAskFurtherButton" text="发送" styleClass="send-button"></Button>
+        </HBox>
+    </VBox>
+
+</VBox> 

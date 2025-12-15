@@ -1,0 +1,238 @@
+.main-container {
+    -fx-background-color: #f0f2f5; /* 恢复正常背景色 */
+    -fx-font-family: "Microsoft YaHei UI";
+    -fx-padding: 0;
+}
+
+.header {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2); /* 蓝紫渐变 */
+    -fx-padding: 15px 20px; /* 增加内边距 */
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-background-radius: 5px; /* 添加圆角 */
+    -fx-margin-bottom: 0; /* 确保与下方紧密连接 */
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white; /* 标题字体颜色改为白色 */
+}
+
+.info-section {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 10px 10px; /* 调整圆角，顶部不圆角 */
+    -fx-padding: 10px 20px; /* 调整内边距 */
+    -fx-spacing: 5px; /* 调整内部元素间距 */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+    -fx-border-color: #DCDCDC;
+    -fx-border-width: 0 1px 1px 1px; /* 顶部无边框 */
+    -fx-margin: 0 20px 0 20px; /* 调整 margin */
+}
+
+.label-bold {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.info-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.info-text.small {
+    -fx-font-size: 12px; /* 提问时间字体变小 */
+}
+
+.status-tag {
+    -fx-background-color: #f0f0f0; /* Default background */
+    -fx-text-fill: #333333; /* Default text */
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER; /* 文本居中 */
+}
+
+/* Specific status tags (matching StudentMainController) */
+.status-tag.unanswered {
+    -fx-background-color: #ff4d4d; /* 红色 */
+    -fx-text-fill: white;
+}
+
+.status-tag.unresolved {
+    -fx-background-color: #ffd700; /* 黄色 */
+    -fx-text-fill: #333333;
+}
+
+.status-tag.resolved {
+    -fx-background-color: #4CAF50; /* 绿色 */
+    -fx-text-fill: white;
+}
+
+/* 咨询内容区域 */
+.content-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 20px; /* 调整内边距 */
+    -fx-spacing: 5px; /* 调整内部元素间距 */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+    -fx-border-color: #DCDCDC;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-margin: 10px 20px 0 20px; /* 调整 margin，与上方区域的间距 */
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding-bottom: 5px; /* 调整内边距 */
+}
+
+.content-text {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-pref-height: 60px; /* 进一步调整高度 */
+    -fx-max-width: 550px; /* 调整最大宽度 */
+    -fx-pref-width: 550px;
+    -fx-wrap-text: true;
+}
+
+/* 回复区域 */
+.reply-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 20px; /* 调整内边距 */
+    -fx-spacing: 5px; /* 内部元素间距 */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+    -fx-border-color: #DCDCDC;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-margin: 10px 20px 0 20px; /* 调整 margin */
+}
+
+.reply-text {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-pref-height: 40px; /* 进一步调整高度 */
+    -fx-max-width: 550px; /* 调整最大宽度 */
+    -fx-pref-width: 550px;
+    -fx-wrap-text: true;
+}
+
+.button-container {
+    -fx-spacing: 10px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.submit-button {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.submit-button:hover {
+    -fx-opacity: 0.9;
+}
+
+.char-count-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+}
+
+.char-count-label.error {
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: bold;
+}
+
+/* 历史回复区域 */
+.history-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 20px; /* 调整内边距 */
+    -fx-spacing: 5px; /* 调整内部元素间距 */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+    -fx-border-color: #DCDCDC;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-vgrow: ALWAYS; /* 确保历史部分垂直方向尽可能大 */
+    -fx-margin: 10px 20px 20px 20px; /* 调整 margin，底部留更多空间 */
+}
+
+.history-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-hbar-policy: never; /* 禁用水平滚动条 */
+    -fx-vgrow: ALWAYS; /* 确保ScrollPane也能垂直增长 */
+    -fx-min-height: 150px; /* 确保最小高度，以显示滚动条 */
+}
+
+.history-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.history-content-container {
+    -fx-background-color: transparent;
+}
+
+.history-item {
+    -fx-background-color: #f0f8ff; /* 历史项背景色 */
+    -fx-background-radius: 8px;
+    -fx-border-color: #cceeff;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+    -fx-margin-bottom: 10px; /* 增加历史条目之间的间距 */
+}
+
+.history-question-header,
+.history-reply-header,
+.history-followup-header {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3a5db6; /* 深蓝色字体 */
+}
+
+.history-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+}
+
+.history-question-content,
+.history-reply-content,
+.history-followup-content {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-wrap-text: true;
+}
+
+.history-type-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979ff;
+    -fx-padding-bottom: 2px;
+}
+
+.history-content-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #222;
+    -fx-padding-bottom: 2px;
+}
+
+.history-time-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #888;
+} 
